@@ -7,5 +7,5 @@ Modulo de personalización del MRP Odoo de Ceramicas Kantu S.A.C.
 
 Autores
 -----
-Luis Rodrigo Mejia Mateus
-Brajean Arce Uscachi
+- Luis Rodrigo Mejia Mateus
+- Brajean Arce Uscachi
