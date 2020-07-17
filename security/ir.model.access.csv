@@ -1,0 +1,32 @@
+id,name,model_id:id,group_id:id,perm_write,perm_read,perm_create,perm_unlink
+access_kantu_merma_user,Kantu User,mrp_kantu.model_mrp_merma,mrp.group_mrp_user,0,1,0,0
+access_kantu_merma_operario,Merma Kantu Operario,mrp_kantu.model_mrp_merma,mrp_kantu.group_mrp_operario,0,1,0,0
+access_kantu_merma_type_supervisor,Merma Type Kantu Supervisor,mrp_kantu.model_mrp_merma_type,mrp_kantu.group_mrp_supervisor,0,1,0,0
+access_kantu_merma_type_manager,Merma Type Kantu Manager,mrp_kantu.model_mrp_merma_type,mrp.group_mrp_manager,1,1,1,1
+access_kantu_merma_supervisor,Merma Kantu Supervisor,mrp_kantu.model_mrp_merma,mrp_kantu.group_mrp_supervisor,1,1,1,1
+access_kantu_workcenter_productivity_loss,mrp.workcenter.productivity.loss,mrp.model_mrp_workcenter_productivity_loss,mrp_kantu.group_mrp_operario,0,1,0,0
+access_kantu_workcenter_productivity,mrp.workcenter.productivity,mrp.model_mrp_workcenter_productivity,mrp_kantu.group_mrp_operario,1,1,1,1
+access_kantu_workcenter_operario,mrp.workcenter,mrp.model_mrp_workcenter,mrp_kantu.group_mrp_operario,1,1,0,0
+access_kantu_workorder_operario,mrp_kantu.workorder.operario,mrp.model_mrp_workorder,mrp_kantu.group_mrp_operario,1,1,0,0
+access_kantu_production_operario,mrp_kantu.mrp.production.operario,mrp.model_mrp_production,mrp_kantu.group_mrp_operario,1,1,0,0
+access_kantu_production_supervisor,mrp_kantu.mrp.production.supervisor,mrp.model_mrp_production,mrp_kantu.group_mrp_supervisor,1,1,1,0
+access_kantu_stock_move_lots_operario,mrp_kantu.stock.move.lots.operario,mrp.model_stock_move_lots,mrp_kantu.group_mrp_operario,1,1,0,0
+access_kantu_stock_move_operario,mrp_kantu.stock.move.operario,mrp.model_stock_move,mrp_kantu.group_mrp_operario,1,1,0,0
+access_kantu_mrp_routing_workcenter_operario,mrp_kantu.mrp.routing.workcenter,mrp.model_mrp_routing_workcenter,mrp_kantu.group_mrp_operario,0,1,0,0
+access_kantu_mrp_message_operario,mrp_kantu.mrp.message,mrp.model_mrp_message,mrp_kantu.group_mrp_operario,1,1,1,0
+access_kantu_stock_scrap_operario,mrp_kantu.stock.scrap,mrp.model_stock_scrap,mrp_kantu.group_mrp_operario,1,1,1,0
+access_kantu_pago_operario,mrp_kantu.mrp.pago,mrp_kantu.model_mrp_pago,mrp_kantu.group_mrp_operario,0,1,0,0
+access_kantu_pago_user,mrp_kantu.mrp.pago,mrp_kantu.model_mrp_pago,mrp.group_mrp_user,0,1,0,0
+access_kantu_pago_supervisor,mrp_kantu.mrp.pago,mrp_kantu.model_mrp_pago,mrp_kantu.group_mrp_supervisor,1,1,1,1
+access_kantu_product_supervisor,mrp_kantu.product.product,product.model_product_product,mrp_kantu.group_mrp_supervisor,1,1,0,0
+access_kantu_order_supervisor,mrp_kantu.mrp.order.production,mrp_kantu.model_mrp_order_production,mrp_kantu.group_mrp_supervisor,1,1,0,0
+access_kantu_order_group_order_production,mrp_kantu.mrp_order_production.group_order_production,mrp_kantu.model_mrp_order_production,mrp_kantu.group_order_production,1,1,1,1
+access_kantu_order_operation_group_order_production,mrp_kantu.mrp_order_operation.group_order_production,mrp_kantu.model_mrp_order_operation,mrp_kantu.group_order_production,1,1,1,1
+access_kantu_order_line_group_order_production,mrp_kantu.mrp_order_line.group_order_production,mrp_kantu.model_mrp_order_line,mrp_kantu.group_order_production,1,1,1,1
+access_kantu_order_production_rel_group_order_production,mrp_kantu.mrp_order_production_rel.group_order_production,mrp_kantu.model_mrp_order_production_rel,mrp_kantu.group_order_production,1,1,1,1
+access_kantu_order_line_supervisor,mrp_kantu.mrp.order.line,mrp_kantu.model_mrp_order_line,mrp_kantu.group_mrp_supervisor,0,1,0,0
+access_kantu_mrp_order_rel_supervisor,mrp_kantu.mrp.order.production.rel,mrp_kantu.model_mrp_order_production_rel,mrp_kantu.group_mrp_supervisor,1,1,0,0
+access_kantu_mrp_order_rel_manager,Kantu Manager Mrp Order Production Rel,mrp_kantu.model_mrp_order_production_rel,mrp.group_mrp_manager,1,1,1,1
+access_kantu_mrp_bom_operario,mrp_kantu.mrp.bom.operario,mrp.model_mrp_bom,mrp_kantu.group_mrp_operario,0,1,0,0
+access_kantu_mrp_bom_line_operario,mrp_kantu.mrp.bom.line.operario,mrp.model_mrp_bom_line,mrp_kantu.group_mrp_operario,0,1,0,0
+access_kantu_mrp_periodo_operario,mrp_kantu.mrp.periodo.operario,mrp_kantu.model_mrp_periodo,mrp_kantu.group_mrp_operario,0,1,0,0

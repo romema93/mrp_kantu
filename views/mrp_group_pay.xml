@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="mrp_group_pay_view_form">
+            <field name="name">mrp.group.pay.view.form</field>
+            <field name="model">mrp.group.pay</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="button_generate_pays" string="Generar pagos" type="object"
+                                class="btn-primary" attrs="{'invisible': [('pay_group_compute_ids','=',False)]}"/>
+                        <button name="button_revert_pays" string="Revertir" type="object"
+                                class="btn-default"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="mrp_periodo_id"/>
+                        </group>
+                        <notebook>
+                            <page string="Personal">
+                                <field name="pay_group_compute_ids">
+                                    <tree editable="bottom">
+                                        <field name="employee_id"/>
+                                        <field name="workdays" sum="Total dias"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

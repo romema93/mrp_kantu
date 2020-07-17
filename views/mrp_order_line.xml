@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <act_window
+                id="order_to_production_action"
+                name="Crear ficha de producción"
+                res_model="mrp.production"
+                context="{'order_ids':active_ids}"
+                src_model="mrp.order.line"
+                key2="client_action_multi"
+                view_mode="form"
+                target="current"/>
+
+        <record id="view_tree_mrp_order_line" model="ir.ui.view">
+            <field name="model">view.tree.mrp.order.line</field>
+            <field name="model">mrp.order.line</field>
+            <field name="arch" type="xml">
+                <tree delete="0" create="0" decoration-bf="state=='confirmed'" decoration-success="state=='process'"
+                      decoration-info="state=='planned'"
+                      decoration-muted="state in ['cancel','done']">
+                    <field name="state"/>
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <field name="num_piezas"/>
+                    <field name="num_piezas_ord"/>
+                    <field name="num_piezas_prod"/>
+                    <field name="progress" widget="progressbar"
+                           attrs="{'invisible':[('state','not in',('planned','process'))]}"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_filter_mrp_order_line" model="ir.ui.view">
+            <field name="name">view.filter.mrp.order.line</field>
+            <field name="model">mrp.order.line</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <filter string="Nuevo" domain="[('state','=','draft')]"/>
+                    <filter name="confirmed" string="Confirmado" domain="[('state','=','confirmed')]"/>
+                    <filter name="planned" string="Planificado" domain="[('state','=','planned')]"/>
+                    <filter name="process" string="En Proceso" domain="[('state','=','process')]"/>
+                    <filter string="Realizado" domain="[('state','=','done')]"/>
+                    <filter string="Enviado" domain="[('state','=','dispatched')]"/>
+                    <filter string="Cancelado" domain="[('state','=','cancel')]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_order_line" model="ir.actions.act_window">
+            <field name="name">Lineas de OP</field>
+            <field name="res_model">mrp.order.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_filter_mrp_order_line"/>
+            <field name="context">{'search_default_confirmed': True,'search_default_planned':
+                True,'search_default_process': True}
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_order_line"
+                name="Lineas de OP"
+                parent="mrp_kantu.menu_order_production"
+                action="action_order_line"
+                groups="mrp_kantu.group_order_production"
+                sequence="2"
+        />
+    </data>
+</odoo>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report id="mrp_production_resume_report"
+                string="Resumen Ficha de Producción"
+                model="mrp.production"
+                report_type="qweb-html"
+                name="mrp_kantu.report_resume_mrp_production_template"
+        />
+        <template id="report_resume_mrp_production_template">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <div id='page' class="page">
+                        <div class="row">
+                            <div class="col-xs-12 mb16" style="font-size: 1.5rem;">
+                                <div class="row">
+                                    <div class="col-xs-6"><strong>Número de Ficha: </strong><span t-field="o.name"/></div>
+                                    <div class="col-xs-6"><strong>Modelo: </strong><span t-field="o.product_id"/></div>
+                                </div>
+                            </div>
+                            <t t-foreach="o.workorder_ids" t-as="workorder">
+                                <div class="col-xs-12">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <div class="row" style="text-transform: uppercase; font-weight: bold;">
+                                                <div class="col-xs-6">
+                                                    <span t-field="workorder.name"/>
+                                                </div>
+                                                <div class="col-xs-6 text-right">
+                                                    <span t-field="workorder.state"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-xs-6">
+                                                    <strong>Piezas Ingresadas:</strong>
+                                                    <br/>
+                                                    <span t-esc="workorder.qty_production"></span>
+                                                    <span t-field="workorder.product_uom_id"></span>
+                                                </div>
+                                                <div class="col-xs-6">
+                                                    <strong>Piezas Procesadas:</strong>
+                                                    <br/>
+                                                    <span t-esc="workorder.qty_produced"></span>
+                                                    <span t-field="workorder.product_uom_id"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <t t-if="workorder.pago_ids">
+                                                    <table class="table">
+                                                        <tr>
+                                                            <th>Personal</th>
+                                                            <th>Servicio</th>
+                                                        </tr>
+                                                        <t t-foreach="workorder.pago_ids" t-as="pago">
+                                                            <t t-if="not pago.merma_id and pago.monto>=0">
+                                                                <tr>
+                                                                    <td>
+                                                                        <span t-field="pago.empleado_id"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span t-field="pago.servicio_id"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                        </t>
+                                                    </table>
+                                                </t>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <t t-if="workorder.merma_ids">
+                                                    <table class="table">
+                                                        <tr>
+                                                            <th>Merma</th>
+                                                            <th>Producto</th>
+                                                            <th>Cantidad</th>
+                                                        </tr>
+                                                        <t t-foreach="workorder.merma_ids" t-as="merma">
+                                                            <tr>
+                                                                <td>
+                                                                    <span t-field="merma.name"/>
+                                                                </td>
+                                                                <td>
+                                                                    <span t-field="merma.product_id.name"/>
+                                                                </td>
+                                                                <td>
+                                                                    <span t-field="merma.qty"/>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </table>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

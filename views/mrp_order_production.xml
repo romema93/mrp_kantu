@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_filter_mrp_order_production" model="ir.ui.view">
+            <field name="name">view.filter.mrp.order.production</field>
+            <field name="model">mrp.order.production</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="order_line_ids"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_form_mrp_order_production" model="ir.ui.view">
+            <field name="name">view.form.mrp.order.production</field>
+            <field name="model">mrp.order.production</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button type="object" name="button_confirm" string="Confirmar" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Numero de orden" nolabel="1"
+                                       attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="fecha_programacion" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Linea de Productos" attrs="{'invisible':[('state','=','draft')]}">
+                                <field name="order_line_ids" state="draft">
+                                    <tree editable="bottom"
+                                          create="false"
+                                          decoration-info="state == 'confirmed'"
+                                          decoration-success="state == 'process'"
+                                          decoration-muted="state == 'done'">
+                                        <field name="state" invisible="1"/>
+                                        <field name="location_dest_id"/>
+                                        <field name="product_id"/>
+                                        <field name="num_piezas"/>
+                                        <field name="num_piezas_ord"/>
+                                        <field name="workorders"/>
+                                        <field name="num_piezas_prod"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Orden Inicial">
+                                <field name="order_operation_ids">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="num_piezas"/>
+                                        <field name="confirmed_pieces"/>
+                                        <field name="location_dest_id"/>
+                                        <field name="observations"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_calendar_mrp_order_production" model="ir.ui.view">
+            <field name="model">view.calendar.mrp.order.production</field>
+            <field name="model">mrp.order.production</field>
+            <field name="arch" type="xml">
+                <calendar date_start="fecha_programacion" color="state"
+                          display="[name], Estado: [state]" mode="month">
+                    <field name="name"/>
+                    <field name="state"/>
+                </calendar>
+            </field>
+        </record>
+
+        <act_window
+                id="action_order_production"
+                name="Ordenes de Producción"
+                res_model="mrp.order.production"
+                view_mode="tree,form,calendar"
+                groups="mrp_kantu.group_order_production"
+        />
+
+        <menuitem
+                id="menu_order_production"
+                name="Ordenes de Producción"
+                parent="mrp.menu_mrp_manufacturing"
+                groups="mrp_kantu.group_order_production"
+        />
+        <menuitem
+                id="menu_order_generate"
+                name="Ordenes generadas"
+                parent="mrp_kantu.menu_order_production"
+                action="action_order_production"
+                groups="mrp_kantu.group_order_production"
+                sequence="1"
+        />
+    </data>
+</odoo>

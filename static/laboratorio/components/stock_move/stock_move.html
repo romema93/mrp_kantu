@@ -1,0 +1,28 @@
+<div class="col-xs-12 col-sm-6 col-md-6">
+    <div class="move-card animated fadeIn">
+        <div class="card-header">
+            <i ng-if="$ctrl.move.state === 'assigned'" class="fa fa-3x fa-check-circle green"></i>
+            <i ng-if="$ctrl.move.state === 'confirmed'" class="fa fa-3x fa-info-circle warning"></i>
+            <i ng-if="$ctrl.move.state === 'waiting'" class="fa fa-3x fa-info-circle warning"></i>
+            <strong>{{$ctrl.move.product_id[1]}}</strong>
+        </div>
+        <div class="row card-body">
+            <div class="col-sm-6">
+                <label>Cantidad</label>
+            </div>
+            <div class="col-sm-6">
+                <strong>{{$ctrl.move.product_qty + ' ' + $ctrl.move.product_uom[1]}}</strong>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-link"
+                    ng-show="$ctrl.move.se_produce" ng-click="$ctrl.SelectMove()"
+                    data-toggle="modal" data-target="#myModal">
+                <i class="fa fa-plus-circle"></i> producir
+            </button>
+            <button type="button" class="btn btn-link collapse-link">
+                <i class="fa fa-exchange"></i> transferir
+            </button>
+        </div>
+    </div>
+</div>

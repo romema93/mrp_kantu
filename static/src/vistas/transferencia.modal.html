@@ -1,0 +1,82 @@
+<!-- Modal -->
+<div class="modal fade" id="TransferenciaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Transferencia</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-xs-12 col-md-6">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Producto</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{mrp_transferencia.product_id[1]}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Cantidad</label>
+                            <div class="col-sm-10">
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6">
+                                        <input type="text" class="o_form_input o_form_field"
+                                               ng-model="mrp_transferencia.product_uom_qty"/>
+                                    </div>
+                                    <div class="col-xs-12 col-md-6">
+                                        <p class="form-control-static">{{mrp_transferencia.product_uom[1]}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Motivo</label>
+                            <div class="col-sm-10">
+                                <select class="o_form_input o_form_field" ng-model="mrp_transferencia.motivo"
+                                        ng-change="ChangeMotivo()">
+                                    <option value="abastecimiento">Abastecimiento</option>
+                                    <option value="adicionar">Adicionar</option>
+                                    <option value="devolucion">Devolucion</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Documento Origen</label>
+                            <div class="col-sm-6">
+                                <p class="form-control-static">{{mrp_transferencia.origin}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Ubicacion Origen</label>
+                            <div class="col-sm-6">
+                                <input type="text" ng-model="mrp_transferencia.location_id"
+                                       uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
+                                       class="o_form_input ui-autocomplete-input">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Ubicacion Destino</label>
+                            <div class="col-sm-6">
+                                <input type="text" ng-model="mrp_transferencia.location_dest_id"
+                                       uib-typeahead="location as location.name for location in locations | filter:$viewValue | limitTo:8"
+                                       class="o_form_input o_form_field">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="RealizarTransferencia()">
+                    Transferir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal-->

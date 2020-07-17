@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_pedido_produccion_form" model="ir.ui.view">
+            <field name="name">Pedidos de Produccion Vista Formulario</field>
+            <field name="model">mrp.pedido.produccion</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button type="object" name="button_confirm" string="Confirmar" class="oe_highlight"
+                                attrs="{'invisible': [('state', '!=', 'nuevo')]}"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Numero de pedido" nolabel="1"
+                                       attrs="{'readonly':[('state','!=','nuevo')]}"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="fecha_programacion" attrs="{'readonly':[('state','!=','nuevo')]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Detalle del Pedido">
+                                <button type="object" name="button_add_detail" string="Agregar Detalle" icon="fa-plus"
+                                attrs="{'invisible':[('state','!=','nuevo')]}"/>
+                                <field name="pedido_line_ids" state="nuevo">
+                                    <tree editable="bottom"
+                                          create="false"
+                                          decoration-info="state == 'confirmado'"
+                                          decoration-success="state == 'proceso'"
+                                          decoration-muted="state == 'realizado'">
+                                        <field name="state" invisible="1"/>
+                                        <field name="location_dest_id"/>
+                                        <field name="product_id"/>
+                                        <field name="num_piezas"/>
+                                        <field name="num_piezas_ord"/>
+                                        <field name="workorders"/>
+                                        <field name="num_piezas_prod"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="mrp_pedido_produccion_calendar" model="ir.ui.view">
+            <field name="model">Pedido Produccion Vista Calendario</field>
+            <field name="model">mrp.pedido.produccion</field>
+            <field name="arch" type="xml">
+                <calendar date_start="fecha_programacion" color="state"
+                          display="[name], Estado: [state]" mode="month">
+                    <!-- Fields used for the display text -->
+                    <field name="name"/>
+                    <field name="state"/>
+                </calendar>
+            </field>
+        </record>
+
+        <act_window
+                id="action_pedido_produccion"
+                name="Pedidos de Produccion"
+                res_model="mrp.pedido.produccion"
+                view_mode="tree,form,calendar"
+        />
+
+        <menuitem
+                id="menu_pedido_produccion"
+                name="Pedidos de Produccion"
+                parent="mrp.menu_mrp_manufacturing"
+                action="action_pedido_produccion"
+                sequence="0"
+        />
+    </data>
+</odoo>

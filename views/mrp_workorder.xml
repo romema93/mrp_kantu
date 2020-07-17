@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Modifica los filtros de las ordenes de trabajo-->
+        <record id="mrp.view_mrp_production_work_order_search" model="ir.ui.view">
+            <field name="arch" type="xml">
+                <search>
+                    <field name="workcenter_id"/>
+                    <filter string="Today" name="today" domain="[('date_start','&gt;=',time.strftime('%%Y-%%m-%%d'))]"/>
+                    <filter string="This Month" name="thismonth"
+                            domain="[('date_start','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="thisyear"
+                            domain="[('date_start','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                    <separator/>
+                    <filter string="Ready" name="ready" domain="[('state','=','ready')]"/>
+                    <filter string="Pending" name="pending" domain="[('state','=','pending')]"/>
+                    <filter string="In Progress" name="progress" domain="[('state','=','progress')]"/>
+                    <filter string="Done" name="done" domain="[('state','=', 'done')]"/>
+                    <filter string="Late" name="late"
+                            domain="[('date_planned_start','&lt;=',time.strftime('%%Y-%%m-%%d')),('state','!=','done')]"/>
+                    <separator/>
+                </search>
+            </field>
+        </record>
+
+        <record id="workorder_form_view_inherit" model="ir.ui.view">
+            <field name="name">Mrp Workorder Form View Inherit</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.mrp_production_workcenter_form_view_inherit"/>
+            <field name="arch" type="xml">
+                <!--Se Oculta el boton 'continuar produccion' al estar supervisado-->
+                <xpath expr="//button[@name='button_start'][3]" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', '|', ('working_state', '=', 'blocked'),
+                        ('is_user_working', '=', True), ('state', 'in', ('done', 'pending', 'ready',
+                        'cancel','supervisado'))]}
+                    </attribute>
+                </xpath>
+                <!--Ocultar el boton desecho-->
+                <xpath expr="//button[@name='button_scrap']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <!--Modificaciones al estado 'readonly' en campos del mrp.workorder-->
+                <field name="qty_producing" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('product_tracking', '=', 'serial'), ('state', 'in',
+                        ('done', 'cancel', 'supervisado'))]}
+                    </attribute>
+                </field>
+                <!--Añadimos nuevos campos a la vista-->
+                <field name="is_produced" position="after">
+                    <field name="base" attrs="{'invisible': [('base','=',False)]}"/>
+                    <field name="piezas_x_base" attrs="{'invisible': [('base','=',False)]}"/>
+                    <field name="qty_base" attrs="{'invisible': [('base','=',False)]}"/>
+                    <field name="numero_pasadas" attrs="{'invisible': [('numero_pasadas','=',0)]}"/>
+                    <field name="puede_supervisar" invisible="1"/>
+                    <field name="puede_anular_supervision" invisible="1"/>
+                </field>
+                <!--Se añade botones a la cabcera del documento-->
+                <button name="button_scrap" position="after">
+                    <button name="button_supervisar" string="Validar Datos" type="object" class="oe_highlight"
+                            attrs="{'invisible': ['|',('state', 'in', ['ready','cancel','pending','progress','supervisado']),('puede_supervisar','=',False)]}"
+                            groups="mrp_kantu.group_mrp_supervisor,mrp.group_mrp_manager"/>
+                    <button name="button_merma" string="Merma" type="object"
+                            attrs="{'invisible': ['|',('state', 'in', ['supervisado','cancel','pending'])]}"
+                            groups="mrp_kantu.group_mrp_supervisor,mrp.group_mrp_manager"/>
+                    <button name="button_personal" string="Asignar Personal" type="object"
+                            confirm="Seguro que desea agregar a todos los usuarios?"
+                            attrs="{'invisible': [('state', 'in', ['cancel','supervisado'])]}"
+                            groups="mrp_kantu.group_mrp_supervisor,mrp.group_mrp_manager"/>
+                    <button name="button_anular_supervision" string="Anular Supervisión" type="object"
+                            attrs="{'invisible': [('puede_anular_supervision','=',False)]}"/>
+                </button>
+                <!--Añadimos un boton que permite ver las mermas registradas en el proceso-->
+                <button name="action_see_move_scrap" position="after">
+                    <button class="oe_stat_button" name="%(action_mrp_merma)d" type="action" icon="fa-tasks"
+                            attrs="{'invisible': [('merma_count', '=', 0)]}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="merma_count"/>
+                            </span>
+                            <span class="o_stat_text">Mermas</span>
+                        </div>
+                    </button>
+                </button>
+                <!--Añadimos el estado 'supervisado'-->
+                <field name="state" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="pending,ready,progress,done,supervisado"/>
+                </field>
+                <!--Modificamos los atributos del label 'disponibilidad'-->
+                <field name="production_availability" position="attributes">
+                    <attribute name="attrs">{'invisible':[('state','in',('done','supervisado','cancel'))]}</attribute>
+                </field>
+                <!--Insertamos una nueva pagina para ver el personal asignado a la orden de trabajo-->
+                <notebook position="inside">
+                    <page string="Personal" groups="mrp.group_mrp_manager,mrp_kantu.group_mrp_supervisor">
+                        <field name="pago_ids" attrs="{'readonly':[('state','in',('supervisado','cancel'))]}">
+                            <tree editable="button" decoration-info="monto&gt;0" decoration-danger="monto&lt;0">
+                                <field name="empleado_id"/>
+                                <field name="servicio_id" options="{'no_create':True}"/>
+                                <field name="monto" groups="mrp.group_mrp_manager" readonly="1" widget="monetary"/>
+                                <field name="merma_id" readonly="1"/>
+                                <field name="currency_id" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="mrp.workcenter_line_calendar" model="ir.ui.view">
+            <field name="name">mrp.production.work.order.calendar</field>
+            <field name="model">mrp.workorder</field>
+            <field name="arch" type="xml">
+                <calendar color="workcenter_id" date_start="date_planned_start" mode="month" string="Operations"
+                          display="[production_id], [workcenter_id]([name])">
+                    <field name="production_id"/>
+                    <field name="workcenter_id"/>
+                    <field name="name"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="mrp_production_workcenter_tree_view_inherit" model="ir.ui.view">
+            <field name="name">Mrp Production Work Order Inherit</field>
+            <field name="model">mrp.workorder</field>
+            <field name="inherit_id" ref="mrp.mrp_production_workcenter_tree_view_inherit"/>
+            <field name="arch" type="xml">
+                <tree position="attributes">
+                    <attribute name="decoration-muted">state in ('supervisado','cancel')</attribute>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_server_validate_wo" model="ir.actions.server">
+            <field name="name">Validar datos</field>
+            <field name="model_id" ref="mrp.model_mrp_workorder"/>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                records.supervise_all_wo()
+            </field>
+        </record>
+        <!--<record model="ir.values" id="action_workorder_cancel_supervision">
+            <field name="name">action_workorder_cancel_supervision</field>
+            <field name="action_id" ref="action_server_cancel_supervision"/>
+            <field name="value" eval="'ir.actions.server,' + str(ref('action_server_cancel_supervision'))"/>
+            <field name="model_id" ref="mrp.model_mrp_workorder"/>
+            <field name="model">mrp.workorder</field>
+            <field name="key2">client_action_multi</field>
+        </record>-->
+        <record id="value_supervise_all_wo" model="ir.values">
+            <field name="key2" eval="'client_action_multi'"/>
+            <field name="model" eval="'mrp.workorder'"/>
+            <field name="name">Validar datos</field>
+            <field name="value" eval="'ir.actions.server,%d'%action_server_validate_wo"/>
+        </record>
+    </data>
+</odoo>

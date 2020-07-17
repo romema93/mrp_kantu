@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mrp_bom_form_view_inherit" model="ir.ui.view">
+            <field name="name">Mrp Bom Form View Inherit</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Servicios">
+                        <field name="bom_line_service_ids" widget="one2many_list">
+                                <tree string="Servicios" editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id" string="Servicio" context="{'default_type': 'service'}" domain="[('type','=','service')]"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id" options="{'no_open':True,'no_create':True}" groups="product.group_uom"/>
+                                    <field name="attribute_value_ids" widget="many2many_tags" domain="[('product_ids.product_tmpl_id', '=', parent.product_tmpl_id)]" options="{'no_create':True}" groups="product.group_product_variant"/>
+                                    <field name="operation_id" groups="mrp.group_mrp_routings" domain="[('routing_id', '=', parent.routing_id)]" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                    <field name="numero_pasadas"/>
+                                </tree>
+                            </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Modifica el domain para que el estado sea diferente de supervisado-->
+        <record id="mrp.action_work_orders" model="ir.actions.act_window">
+            <field name="domain">[('workcenter_id', '=', active_id), ('state', '!=', 'supervisado')]</field>
+        </record>
+
+        <record id="workcenter_form_view_inherit" model="ir.ui.view">
+            <field name="name">Mrp Workcenter Form View Inherit</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Personal">
+                        <field name="employee_ids">
+                            <tree>
+                                <field name="name"/>
+                                <field name="department_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+        <record id="action_work_orders" model="ir.actions.act_window">
+            <field name="name">Ordenes de Trabajo</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.workorder</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,gantt,pivot,graph,calendar</field>
+            <field name="search_view_id" ref="mrp.view_mrp_production_work_order_search"/>
+            <field name="domain">[('workcenter_id', '=', active_id),('state', '!=', 'supervisado')]</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a work center.
+              </p><p>
+                Work Centers allow you to create and manage manufacturing
+                units. They consist of workers and/or machines, which are
+                considered as units for task assignation as well as capacity
+                and planning forecast.
+              </p>
+            </field>
+        </record>
+        <record id="mrp_workcenter_kanban_inherit" model="ir.ui.view">
+            <field name="name">mrp.workcenter.kanban.inherit</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_workcenter_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//t[@t-name='kanban-box']//div[@class='col-xs-6 o_kanban_primary_right']/div[4]"
+                       position="replace">
+                </xpath>
+                <xpath expr="//t[@t-name='kanban-box']//div[@class='col-xs-6 o_kanban_primary_right']"
+                       position="inside">
+                    <div class="row" t-if="record.workorder_done_count.raw_value &gt; 0"
+                         groups="mrp_kantu.group_mrp_supervisor,mrp.group_mrp_manager">
+                        <div class="col-xs-8">
+                            <a name="%(action_work_orders)d" type="action" context="{'search_default_done': 1}">
+                                Supervisar
+                            </a>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <span class="label label-success">
+                                <field name="workorder_done_count"/>
+                            </span>
+                        </div>
+                    </div>
+                </xpath>
+                <xpath expr="//t[@t-name='kanban-box']//div[@class='o_kanban_manage_button_section']"
+                       position="attributes">
+                    <attribute name="groups">mrp_kantu.group_mrp_supervisor,mrp.group_mrp_manager</attribute>
+                </xpath>
+                <xpath expr="//t[@t-name='kanban-box']//div[@class='col-xs-6 o_kanban_primary_left']"
+                       position="attributes">
+                    <attribute name="groups">mrp_kantu.group_mrp_supervisor,mrp.group_mrp_manager</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="mrp.mrp_workorder_report">
+            <field name="name">Work Orders Performance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mrp.workorder</field>
+            <field name="domain">[('state','=','supervisado')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph,pivot,tree,form,gantt</field>
+        </record>
+    </data>
+</odoo>

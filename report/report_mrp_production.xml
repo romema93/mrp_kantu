@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- report , stock inventories date... start -->
+        <record model="ir.ui.view" id="report_mrp_production_tree">
+            <field name="name">report.mrp.production.tree</field>
+            <field name="model">report.mrp.production</field>
+            <field name="arch" type="xml">
+                <tree string="Ordenes de Produccion" create="false">
+                    <field name="periodo_id"/>
+                    <field name="base"/>
+                    <field name="production_id"/>
+                    <field name="product_id"/>
+                    <field name="merma"/>
+                    <field name="workcenter_id" invisible="1"/>
+                    <field name="mrp_workorder_name"/>
+                    <field name="employee_id"/>
+                    <field name="service_id"/>
+                    <field name="qty"/>
+                    <field name="total_bases"/>
+                    <field name="pasadas" invisible="1"/>
+                    <field name="qty"/>
+                    <field name="price"/>
+                    <field name="monto"/>
+                    <field name="ayudante" invisible="1"/>
+                    <field name="pago_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="report_mrp_production_pivot" model="ir.ui.view">
+            <field name="name">report.mrp.production.pivot</field>
+            <field name="model">report.mrp.production</field>
+            <field name="arch" type="xml">
+                <pivot string="Reporte Produccion">
+                    <field name="qty" type="measure"/>
+                    <field name="monto" type="measure"/>
+                    <field name="price" type="measure"/>
+                    <field name="workcenter_id" type="row"/>
+                    <field name="production_id" type="row"/>
+                    <field name="product_id" type="row"/>
+                    <field name="service_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="report_mrp_production_filter" model="ir.ui.view">
+            <field name="name">report.mrp.production.filter</field>
+            <field name="model">report.mrp.production</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="production_id"/>
+                    <field name="product_id"/>
+                    <field name="mrp_workorder_name"/>
+                    <field name="employee_id"/>
+                    <field name="service_id"/>
+                    <field name="periodo_id"/>
+                    <field name="workcenter_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_report_mrp_production_specific">
+            <field name="name">Pagos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">report.mrp.production</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot,tree</field>
+            <field name="domain">[('periodo_id', '=', active_id)]</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_report_mrp_production">
+            <field name="name">Ordenes de Produccion y Pagos</field>
+            <field name="res_model">report.mrp.production</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot,tree</field>
+        </record>
+
+        <menuitem parent="mrp.menu_mrp_reporting"
+                  action="action_report_mrp_production"
+                  id="menu_report_mrp_production"
+                  groups="mrp.group_mrp_manager"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,135 @@
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">{{production.name}}</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning" role="alert"
+                     ng-show="production.availability!='assigned' && production.id">
+                    <strong>Stock Insuficiente!</strong>
+                    " No existe cantidad necesaria de materiales para producir"
+                </div>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Producto</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static">{{production.product_id[1]}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Cantidad</label>
+                        <div class="col-sm-2">
+                            <input type="number" class="o_form_input o_form_field" ng-model="production.product_qty">
+                        </div>
+                        <div class="col-sm-8">
+                            <p class="form-control-static">{{production.product_uom_id[1]}}</p>
+                        </div>
+                    </div>
+                    <div ng-hide="production.id" class="form-group">
+                        <label class="col-sm-2 control-label">Motivo</label>
+                        <div class="col-sm-10">
+                            <select class="o_form_input o_form_field" ng-model="production.type"/>
+                            <option value="abastecimiento">Abastecimiento</option>
+                            <option value="adicionar">Adicionar</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <label class="col-sm-2 control-label">Lista de Materiales</label>
+                        <div class="col-sm-10">
+                            <select class="o_form_input o_form_field"
+                                    ng-options="bom[1] for bom in bom_ids"
+                                    ng-model="production.bom_id"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Tipo de Operacion</label>
+                        <div class="col-sm-10">
+                            <select class="o_form_input o_form_field"
+                                    ng-options="picking[1] for picking in picking_type_ids"
+                                    ng-model="production.picking_type_id"
+                                    ng-change="ChangePicking()"></select>
+
+                        </div>
+                    </div>-->
+                </form>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th>Medida</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="i in production.move_raws" style="{{(i.state=='waiting'||i.state=='confirmed') ? 'color:red':''}}">
+                    <td>{{i.product_id[1] || i.product_id.name}}</td>
+                    <td>{{i.product_uom_qty}}</td>
+                    <th>{{i.subtotal}}</th>
+                    <td>{{i.product_uom[1] || i.product_uom.name}}</td>
+                    <td>
+                        <button type="button" class="btn btn-link" ng-click="DeleteMoveRaw(i)"
+                                ng-show="production.bom_id[1]==='PERSONALIZADO'">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-show="agregar_material">
+                    <td>
+                        <input type="text" ng-model="move_raw.product_id"
+                               uib-typeahead="product as product.name for product in product_ids | filter:$viewValue | limitTo:8"
+                               class="o_form_input o_form_field">
+                    </td>
+                    <td>
+                        <input type="number" ng-model="move_raw.product_uom_qty">
+                    </td>
+                    <td></td>
+                    <td>
+                        <input type="text" ng-model="move_raw.product_uom"
+                               uib-typeahead="uom as uom.name for uom in product_uom_ids | filter:$viewValue | limitTo:8"
+                               class="o_form_input o_form_field">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-link" ng-click="AddMoveRaw()">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-link" ng-click="CancelMoveRaw()">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-show="production.bom_id[1]==='PERSONALIZADO'">
+                    <td colspan="4" class="o_form_field_x2many_list_row_add"><a href="#" ng-click="AgregarMaterial()">Añadir
+                        un elemento</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" ng-click="CrearProduccion()"
+                        ng-hide="production.id || production.bom_id[1]==='PERSONALIZADO'">
+                    Confirmar
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="MarcarHecho()"
+                        ng-show="production.id && production.state=='confirmed' && production.availability=='assigned'">
+                    Realizado
+                </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="DoneCustomProduction()"
+                        ng-show="production.bom_id[1]==='PERSONALIZADO'">
+                    Realizado2
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="ActionAssign()"
+                        ng-show="production.availability != 'assigned' && production.id">
+                    Comprobar Disponibilidad
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal-->

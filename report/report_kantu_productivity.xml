@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="report_kantu_productivity_pivot" model="ir.ui.view">
+            <field name="name">report.kantu.productivity.pivot</field>
+            <field name="model">report.kantu.productivity</field>
+            <field name="arch" type="xml">
+                <pivot string="Reporte Productividad">
+                    <field name="product_qty" type="measure"/>
+                    <field name="base_qty" type="measure"/>
+                    <field name="merma_src_qty" type="measure"/>
+                    <field name="merma_base_src_qty" type="measure"/>
+                    <field name="meters_qty" type="measure"/>
+                    <field name="diff_meters" type="measure"/>
+                    <field name="workcenter_id" type="row"/>
+                    <field name="workorder" type="row"/>
+                    <field name="base_id" type="row"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="report_kantu_productivity_filter" model="ir.ui.view">
+            <field name="name">report.kantu.productivity.filter</field>
+            <field name="model">report.kantu.productivity</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="workcenter_id"/>
+                    <field name="production_id"/>
+                    <field name="workorder"/>
+                    <field name="base_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_report_kantu_productivity">
+            <field name="name">Reporte productividad</field>
+            <field name="res_model">report.kantu.productivity</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot</field>
+        </record>
+
+        <menuitem parent="mrp.menu_mrp_reporting"
+                  action="action_report_kantu_productivity"
+                  id="menu_report_kantu_productivity"
+                  groups="mrp.group_mrp_manager"/>
+
+    </data>
+</odoo>

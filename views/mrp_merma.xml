@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="merma_form_view" model="ir.ui.view">
+            <field name="name">Mrp Merma Form View</field>
+            <field name="model">mrp.merma</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="type_id" required="1"/>
+                            <field name="discount_required" invisible="1"/>
+                            <field name="wo_dest_id" domain="[('id','in',context.get('workorder_ids',[]))]" options="{'no_open':True,'no_create': True}"/>
+                            <field name="servicio_id" domain="[('id','in',context.get('servicio_descuento_ids',[]))]"
+                                   options="{'no_create': True}"
+                                   attrs="{'invisible':[('discount_required','=',False)],'required':[('discount_required','=',True)]}"/>
+                        </group>
+                        <group>
+                            <field name="wo_source_id" invisible="True"/>
+                            <field name="product_id" domain="[('id','in',context.get('products_available',[]))]" options="{'no_create': True}"/>
+                            <label for="qty"/>
+                            <div class="o_row">
+                                <field name="qty" required="1"/>
+                                <field name="product_uom_id" options="{'no_create': True}"/>
+                            </div>
+                            <field name="lot_available" invisible="1"/>
+                            <field name="lot_id" options="{'no_create': True}" attrs="{'invisible': [('lot_available','=',False)]}"/>
+                            <field name="alter_production"/>
+                            <field name="scrap_location_id" options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_done" string="Guardar" type="object" class="btn-primary"/>
+                        <button string="Cancelar" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="merma_tree_view" model="ir.ui.view">
+            <field name="name">Mrp Merma Tree View</field>
+            <field name="model">mrp.merma</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="product_id"/>
+                    <field name="wo_dest_id"/>
+                    <field name="qty"/>
+                    <field name="product_uom_id"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_mrp_merma">
+            <field name="name">Mermas</field>
+            <field name="res_model">mrp.merma</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('wo_source_id','=',active_id)]</field>
+        </record>
+    </data>
+</odoo>

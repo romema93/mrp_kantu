@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="mrp_kantu assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/mrp_kantu/static/src/css/estilos_kantu.css"/>
+            <!--<script type="text/javascript" src="/mrp_kantu/static/src/js/lib/angular.js"></script>-->
+            <script type="text/javascript" src="/mrp_kantu/static/src/js/workorder.js"></script>
+            <script type="text/javascript" src="/mrp_kantu/static/src/js/mrp_kantu_production.js"></script>
+        </xpath>
+    </template>
+</odoo>

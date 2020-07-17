@@ -1,0 +1,120 @@
+<ng-include src="'/mrp_kantu/static/src/vistas/transferencia.modal.html'"></ng-include>
+<ng-include src="'/mrp_kantu/static/src/vistas/producir.modal.html'"></ng-include>
+<div class="loading" ng-hide="dataLoaded">
+    <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    <span class="sr-only">Loading...</span>
+</div>
+<div class="container-fluid" style="padding-top: 1.3rem;">
+    <div class="panel panel-default" style="top: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;">
+        <div class="panel-heading" style="background-color: white;">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2 class="text-center">
+                        {{mrp_production.product_id[1]}}
+                    </h2>
+                    <!--<form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Producto</label>
+                            <div class="col-sm-10">
+                                <h2 class="form-control-static">{{mrp_production.product_id[1]}}</h2>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Cantidad</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static">{{mrp_production.product_qty+'
+                                    '+mrp_production.product_uom_id[1]}}</p>
+                            </div>
+                        </div>
+                    </form>-->
+                </div>
+                <div class="col-md-4">
+                    <h2 class="text-center">
+                        {{mrp_production.product_qty+' '+mrp_production.product_uom_id[1]}}
+                    </h2>
+                </div>
+                <!--<div class="col-xs-4">
+                    <a class="btn btn-lg btn-info" href="#">
+                        <i class="fa fa-flag fa-2x pull-left"></i> MEZCLAS<br>{{mezclas.length}}</a>
+                </div>-->
+            </div>
+        </div>
+        <div class="panel-body" style="background-color: #f5f5f5;flex-grow: 1">
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="panel panel-default panel-kantu">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading"><h2>Lista de Materiales</h2></div>
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad prevista</th>
+                                    <th>A consumir</th>
+                                    <th>Und. Medida</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="i in move_raw_ids" ng-class="disabled" ng-if="i.se_produce">
+                                    <td><b>{{i.product_id[1]}}</b></td>
+                                    <td>{{i.quantity_available}}</td>
+                                    <td>{{i.product_uom_qty}}</td>
+                                    <td>{{i.product_uom[1]}}</td>
+                                    <td ng-if="mrp_production.state != 'done'">
+                                        <!--<button class="btn btn-primary btn-sm"
+                                                data-toggle="modal" data-target="#myModal" title="Producir"
+                                                ng-if="i.se_produce" ng-click="ModalProducir(i)">
+                                            <i class="fa fa-wrench" aria-hidden="true"></i>
+                                        </button>
+                                        <button class="btn btn-info btn-sm" data-toggle="modal" title="Transferir" data-target="#TransferenciaModal"
+                                                ng-click="ModalTransferir(i)">
+                                            <i class="fa fa-exchange" aria-hidden="true"></i>
+                                        </button>-->
+                                        <a class="fa-stack fa-lg" data-toggle="modal" data-target="#myModal"
+                                           title="Producir"
+                                           ng-if="i.se_produce" ng-click="ModalProducir(i)">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-wrench fa-stack-1x fa-inverse"></i>
+                                        </a>
+                                        <a class="fa-stack fa-lg a-info" data-toggle="modal" title="Transferir"
+                                           data-target="#TransferenciaModal"
+                                           ng-click="ModalTransferir(i)">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-exchange fa-stack-1x fa-inverse"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="panel panel-default panel-kantu">
+                        <div class="panel-heading"><h2>Operaciones <span class="badge">{{ops.length}}</span></h2></div>
+                        <div class="panel-body" style="background-color: #fafafa;">
+                            <div class="op-container" ng-repeat="op in ops"
+                                 ng-class="{'op-confirmed': op.state=='confirmed',
+                                 'op-done': op.state=='done'}" ng-click="GetOp(op)">
+                                <p class="flex-1">{{op.id}}</p>
+                                <p class="flex-1">{{op.name}}</p>
+                                <p class="flex-3"><strong>{{op.product_id[1]}}</strong></p>
+                                <p class="flex-1">{{op.product_uom_qty}}</p>
+                                <p class="flex-1">{{op.product_uom[1]}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

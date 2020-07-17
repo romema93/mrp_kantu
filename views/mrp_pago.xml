@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="pago_view_tree">
+            <field name="name">Pagos</field>
+            <field name="model">mrp.pago</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="empleado_id"/>
+                    <field name="servicio_id"/>
+                    <field name="price" widget="monetary"/>
+                    <field name="qty"/>
+                    <field name="fecha_pago"/>
+                    <field name="monto" widget="monetary"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_pago_view" model="ir.actions.act_window">
+            <field name="name">Pagos</field>
+            <field name="res_model">mrp.pago</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,pivot</field>
+        </record>
+        <menuitem id="menu_pays_root"
+                  name="Pagos"
+                  parent="mrp.menu_mrp_root"/>
+    </data>
+</odoo>

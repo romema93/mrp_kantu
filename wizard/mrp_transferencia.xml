@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="production_transfer_wizard" model="ir.ui.view">
+            <field name="name">production.transfer.wizard</field>
+            <field name="model">mrp.production.transfer</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="product_id" domain="[('id','in',context.get('product_ids',[]))]"/>
+                            <label for="qty"/>
+                            <div class="o_row">
+                                <field name="qty"/>
+                                <field name="product_uom_id"/>
+                            </div>
+                            <field name="transfer_type"/>
+                        </group>
+                        <group>
+                            <field name="origin"/>
+                            <field name="location_id"/>
+                            <field name="location_dest_id"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name='button_transfer' type="object" string="Realizar Tranferencia"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
